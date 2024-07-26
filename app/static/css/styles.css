@@ -1,0 +1,307 @@
+/* styles.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url("C:\Users\Admin\Documents\PDF Doctor\static\images\background_image.png");
+    background-color: #fa0909;
+}
+
+header nav {
+    background-color: #3f15f8;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav .logo a {
+    color: #fff;
+    text-decoration-line: underline;
+  text-decoration-color: rgb(8, 8, 8);
+  text-decoration-style: double;
+  text-decoration-thickness: 5px;
+    font-size: 1.6rem;
+}
+
+header nav .menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header nav .menu ul li {
+    margin-right: 1rem;
+}
+
+header nav .menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    text-decoration-color: #444;
+    font-size: 1rem;
+}
+
+header nav .menu ul li ul {
+    display: none;
+    position: absolute;
+    background-color: #444;
+    padding: 1rem;
+    list-style-type: none;
+}
+
+header nav .menu ul li:hover ul {
+    display: block;
+}
+
+header nav .menu ul li ul li {
+    margin: 0;
+}
+
+.main {
+    padding: 2rem;
+}
+
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 1rem;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 1.2rem;
+}
+
+.content {
+    padding: 0 1rem;
+    display: none;
+    overflow: hidden;
+    background-color: #0bb305;
+    background-image: url(background_image.png);
+}
+
+.active {
+    background-color: #e76868;
+}
+
+.collapsible:hover {
+    background-color: #f1f1f1;
+}
+
+.collapsible:hover .content {
+    display: block;
+}
+
+.icon-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 2rem 0;
+}
+
+.icon-button {
+    background-color: #e0f7fa;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(23, 30, 41, 0.1);
+}
+
+.icon-button img {
+    width: 50px;
+    height: 50px;
+}
+
+.icon-button .button-text {
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.icon-button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.icon-button:hover {
+    background-color: #b2ebf2;
+}
+
+header nav .top-right a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+header nav .options {
+    position: relative;
+    display: inline-block;
+}
+header nav .dropdown-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+header nav .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+header nav .dropdown-content a {
+    color: rgb(20, 29, 155);
+    padding: 15px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+header nav .dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+header nav .options:hover .dropdown-content {
+    display: block;
+}
+    
+/* Add these styles to your existing CSS file */
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    background-color: #0288d1;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0277bd;
+}
+
+.download-button {
+    background-color: #0288d1;
+    color: white;
+    padding: 20px 40px;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.download-button:hover {
+    background-color: #0277bd;
+}
+
+#progress-container {
+    margin-top: 20px;
+}
+
+progress {
+    width: 100%;
+    max-width: 500px;
+    height: 20px;
+}
+
+#download-container {
+    margin-top: 20px;
+    display: none;
+}
+
+/* Add custom styles for the download page */
+.container {
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+}
+
+.card-title {
+    font-weight: 700;
+}
+
+.card-text {
+    font-size: 1.2em;
+}
+
+.btn-primary {
+    background-color: #4caf50;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+.progress {
+    height: 30px;
+}
+
+.progress-bar {
+    line-height: 30px;
+}
+#drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 20px;
+    width: 480px;
+    font-family: sans-serif;
+    margin: 100px auto;
+    padding: 20px;
+}
+#drop-area.highlight {
+    border-color: purple;
+}
+p {
+    margin-top: 0;
+}
+.my-form {
+    margin-bottom: 10px;
+}
+#fileElem {
+    display: none;
+}
+.button {
+    display: inline-block;
+    padding: 10px;
+    background: #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.button:hover {
+    background: #ddd;
+}
+#preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#preview-area img {
+    cursor: move;
+}

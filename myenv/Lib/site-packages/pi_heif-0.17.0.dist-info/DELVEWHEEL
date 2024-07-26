@@ -1,0 +1,2 @@
+Version: 1.7.0
+Arguments: ['C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cibw-run-ctemu_d9\\cp312-win_amd64\\build\\venv\\Scripts\\delvewheel', 'repair', '-vv', '-w', 'C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cibw-run-ctemu_d9\\cp312-win_amd64\\repaired_wheel', 'C:\\Users\\runneradmin\\AppData\\Local\\Temp\\cibw-run-ctemu_d9\\cp312-win_amd64\\built_wheel\\pi_heif-0.17.0-cp312-cp312-win_amd64.whl', '--add-path', 'C:/temp/msys64/mingw64/bin']

@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welcome to PDF DOCTOR</h1>
+<p>Select a function to get started:</p>
+
+<section class="home-page">
+    <div class="icon-buttons">
+        <div class="icon-button">
+            <a href="/merge_pdf">
+                <img src="{{ url_for('static', filename='images/merge_pdf.png') }}" alt="Merge PDF Icon">
+                <div class="button-text">Merge PDF<br><small>Combine PDFs in your specified order</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/split_pdf">
+                <img src="{{ url_for('static', filename='images/split_pdf.png') }}" alt="Split PDF Icon">
+                <div class="button-text">Split PDF<br><small>Split PDFs into specific ranges</small></div>
+            </a>
+        </div>
+        <!-- Add similar icon buttons for all functionalities -->
+
+        <div class="icon-button">
+            <a href="/compress_pdf">
+                <img src="{{ url_for('static', filename='images/compress_pdf.png') }}" alt="Compress PDF Icon">
+                <div class="button-text">Compress PDF<br><small>Reduce PDFs size while maintaining quality</small></div>
+            </a>
+        </div>
+
+        <div class="icon-button">
+            <a href="/organize_pdf">
+                <img src="{{ url_for('static', filename='images/organize_pdf.png') }}" alt="Organize PDF Icon">
+                <div class="button-text">Organize PDF<br><small>Reorder and organize PDF pages</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/rotate_pdf">
+                <img src="{{ url_for('static', filename='images/rotate_pdf.png') }}" alt="Rotate PDF Icon">
+                <div class="button-text">Rotate PDF<br><small>Rotate PDF pages</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/sign_pdf">
+                <img src="{{ url_for('static', filename='images/sign_pdf.png') }}" alt="Sign PDF Icon">
+                <div class="button-text">Sign PDF<br><small>Add a signature to your PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/watermark_pdf">
+                <img src="{{ url_for('static', filename='images/add_watermark_to_pdf.png') }}" alt="Watermark PDF Icon">
+                <div class="button-text">Watermark PDF<br><small>Add watermark to your PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/repair_pdf">
+                <img src="{{ url_for('static', filename='images/repair_pdf.png') }}" alt="Repair PDF Icon">
+                <div class="button-text">Repair PDF<br><small>Fix corrupted PDF files</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/number_pdf">
+                <img src="{{ url_for('static', filename='images/number_pdf.png') }}" alt="Number PDF Icon">
+                <div class="button-text">Number PDF<br><small>Add page numbers to your PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/edit_pdf">
+                <img src="{{ url_for('static', filename='images/edit_pdf.png') }}" alt="Edit PDF Icon">
+                <div class="button-text">Edit PDF<br><small>Edit the content of your PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/extract_table">
+                <img src="{{ url_for('static', filename='images/extract_table_from_pdf.png') }}" alt="Extract Table Icon">
+                <div class="button-text">Extract Table<br><small>Extract tables from your PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/pdf_to_excel">
+                <img src="{{ url_for('static', filename='images/pdf_to_excel.png') }}" alt="PDF to Excel Icon">
+                <div class="button-text">PDF to Excel<br><small>Convert PDF to Excel</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/excel_to_pdf">
+                <img src="{{ url_for('static', filename='images/excel_to_pdf.png') }}" alt="Excel to PDF Icon">
+                <div class="button-text">Excel to PDF<br><small>Convert Excel to PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/pdf_to_word">
+                <img src="{{ url_for('static', filename='images/pdf_to_word.png') }}" alt="PDF to Word Icon">
+                <div class="button-text">PDF to Word<br><small>Convert PDF to Word</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/word_to_pdf">
+                <img src="{{ url_for('static', filename='images/word_to_pdf.png') }}" alt="Word to PDF Icon">
+                <div class="button-text">Word to PDF<br><small>Convert Word to PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/pdf_to_powerpoint">
+                <img src="{{ url_for('static', filename='images/pdf_to_powerpoint.png') }}" alt="PDF to PowerPoint Icon">
+                <div class="button-text">PDF to PowerPoint<br><small>Convert PDF to PowerPoint</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/powerpoint_to_pdf">
+                <img src="{{ url_for('static', filename='images/powerpoint_to_pdf.png') }}" alt="PowerPoint to PDF Icon">
+                <div class="button-text">PowerPoint to PDF<br><small>Convert PowerPoint to PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/html_to_pdf">
+                <img src="{{ url_for('static', filename='images/html_to_pdf.png') }}" alt="HTML to PDF Icon">
+                <div class="button-text">HTML to PDF<br><small>Convert HTML to PDF</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/pdf_to_html">
+                <img src="{{ url_for('static', filename='images/pdf_to_html.png') }}" alt="PDF to HTML Icon">
+                <div class="button-text">PDF to HTML<br><small>Convert PDF to HTML</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/insert_row_after_name_change">
+                <img src="{{ url_for('static', filename='images/insert_row.png') }}" alt="Insert Row Icon">
+                <div class="button-text">Insert Row<br><small>Insert row after name change</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/unmerge_all_sheets">
+                <img src="{{ url_for('static', filename='images/unmerge_sheets.png') }}" alt="Unmerge Sheets Icon">
+                <div class="button-text">Unmerge Sheets<br><small>Unmerge all sheets</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/delete_rows_with_multiple_filters">
+                <img src="{{ url_for('static', filename='images/delete_rows.png') }}" alt="Delete Rows Icon">
+                <div class="button-text">Delete Rows<br><small>Delete rows with multiple filters</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/combine_worksheets_to_first_sheet">
+                <img src="{{ url_for('static', filename='images/combine_sheets.png') }}" alt="Combine Sheets Icon">
+                <div class="button-text">Combine Sheets<br><small>Combine worksheets to first sheet</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/add_column_and_apply_formula">
+                <img src="{{ url_for('static', filename='images/add_column.png') }}" alt="Add Column Icon">
+                <div class="button-text">Add Column<br><small>Add column and apply formula</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/filter_and_delete_blanks_in_first_column">
+                <img src="{{ url_for('static', filename='images/filter_blanks.png') }}" alt="Filter Blanks Icon">
+                <div class="button-text">Filter Blanks<br><small>Filter and delete blanks in first column</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/extract_table_from_image">
+                <img src="{{ url_for('static', filename='images/extract_table.png') }}" alt="Extract Table from Image Icon">
+                <div class="button-text">Extract Table<br><small>Extract tables from images</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/apply_ocr">
+                <img src="{{ url_for('static', filename='images/ocr_pdf.png') }}" alt="Apply OCR Icon">
+                <div class="button-text">Apply OCR<br><small>Apply OCR to images</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/pdf_to_text">
+                <img src="{{ url_for('static', filename='images/pdf_to_text.png') }}" alt="PDF to Text Icon">
+                <div class="button-text">PDF to Text<br><small>Convert PDF to text</small></div>
+            </a>
+        </div>
+        <div class="icon-button">
+            <a href="/extract_text_from_image">
+                <img src="{{ url_for('static', filename='images/pdf_to_text.png') }}" alt="Extract Text from Image Icon">
+                <div class="button-text">Extract Text<br><small>Extract text from images</small></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+
+    </div>
+</section>
+{% endblock %}

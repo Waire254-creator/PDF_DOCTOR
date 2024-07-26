@@ -1,0 +1,29 @@
+{% extends "home.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Page Reorganizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.13.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>PDF Page Reorganizer</h1>
+    <div id="dropZone">
+        <p>Drag & Drop your PDF here or click to select</p>
+        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+    </div>
+    <div id="pageContainer"></div>
+    <button id="reorganizeBtn" style="display: none;">Reorganize PDF</button>
+    
+    
+    <script src="{{ url_for('static', filename='js/pdf_organizer.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pdf_organizer.css') }}">
+</body>
+</html>
+
+
+{% endblock %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Doctor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">PDF DOCTOR</a>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">PDF TOOLS</a>
+                        <ul>
+                            <li><a href="/merge_pdf">Merge PDF</a></li>
+                            <li><a href="/split_pdf">Split PDF</a></li>
+                            <li><a href="/compress_pdf">Compress PDF</a></li>
+                            <li><a href="/ocr_pdf">OCR PDF</a></li>
+                            <li><a href="/organize_pdf">Organize PDF</a></li>
+                            <li><a href="/rotate_pdf">Rotate PDF</a></li>
+                            <li><a href="/sign_pdf">Sign PDF</a></li>
+                            <li><a href="/watermark_pdf">Watermark PDF</a></li>
+                            <li><a href="/repair_pdf">Repair PDF</a></li>
+                            <li><a href="/number_pdf">Number PDF</a></li>
+                            <li><a href="/edit_pdf">Edit PDF</a></li>
+                            <li><a href="/extract_table">Extract Table</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">CONVERT</a>
+                        <ul>
+                            <li><a href="/pdf_to_excel">PDF to Excel</a></li>
+                            <li><a href="/excel_to_pdf">Excel to PDF</a></li>
+                            <li><a href="/pdf_to_word">PDF to Word</a></li>
+                            <li><a href="/word_to_pdf">Word to PDF</a></li>
+                            <li><a href="/pdf_to_powerpoint">PDF to PowerPoint</a></li>
+                            <li><a href="/powerpoint_to_pdf">PowerPoint to PDF</a></li>
+                            <li><a href="/html_to_pdf">HTML to PDF</a></li>
+                            <li><a href="/pdf_to_html">PDF to HTML</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">ANALYZE EXCEL</a>
+                        <ul>
+                            <li><a href="/insert_row_after_name_change">Insert Row After Name Change</a></li>
+                            <li><a href="/unmerge_all_sheets">Unmerge All Sheets</a></li>
+                            <li><a href="/delete_rows_with_multiple_filters">Delete Rows With Multiple Filters</a></li>
+                            <li><a href="/combine_worksheets_to_first_sheet">Combine Worksheets To First Sheet</a></li>
+                            <li><a href="/add_column_and_apply_formula">Add Column And Apply Formula</a></li>
+                            <li><a href="/filter_and_delete_blanks_in_first_column">Filter And Delete Blanks In First Column</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">IMAGE TOOLS</a>
+                        <ul>
+                            <li><a href="/extract_table_from_image">Extract Table</a></li>
+                            <li><a href="/apply_ocr">Apply OCR</a></li>
+                            <li><a href="/pdf_to_text">PDF to Text</a></li>
+                            <li><a href="/extract_text_from_image">Extract Text from Image</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Languages</a></li>
+                    <li><a href="#">Help and FAQs</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                </ul>
+                <div class="options">
+                    <button class="dropdown-button">☰</button>
+                    <div class="dropdown-content">
+                        <a href="/">Home</a>
+                        <a href="#">Pricing</a>
+                        <a href="#">Languages</a>
+                        <a href="#">Help</a>
+                        <a href="#">FAQs</a>
+                    </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 PDF Doctor</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
