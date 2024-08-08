@@ -1,24 +1,31 @@
-from flask import Flask 
-from flask import render_template, request, jsonify, send_file
-from config import Config
+from flask import Flask
 
-def create_app(config_class=Config):
+
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    
 
+    from .routes import bp as main_bp
+    app.register_blueprint(main_bp)
 
-    #from app.merge import bp as merge_bp
-    #app.register_blueprint(merge_bp, url_prefix='/merge')
-    from app.organize import bp as organize_bp
-    app.register_blueprint(organize_bp, url_prefix='/organize_pdf')
+    from .merge.utils import merge_bp
+    app.register_blueprint(merge_bp)
+    
 
+    from .split.routes import bp as split_bp
+    app.register_blueprint(split_bp)
 
-    app.secret_key = 'Waire254'
-    from app.main.views import main_bp
-    app.register_blueprint(main_bp, url_prefix='/')
+    from .organize.utils import organize_bp
+    app.register_blueprint(organize_bp)
 
-    @app.route('/')
-    def base():
-        return render_template('base.html')
+    from .repair.routes import bp as repair_bp
+    app.register_blueprint(repair_bp)
+    
+    from .rotate.utils import rotate_bp
+    app.register_blueprint(rotate_bp)
+
+    from .signup.signup import signup_bp
+    app.register_blueprint(signup_bp)
+
 
     return app

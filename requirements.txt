@@ -3,3 +3,13 @@ flask-cors
 PyPDF2
 pillow
 pytesseract
+Flask==2.0.2
+Flask-WTF==0.15.1
+WTForms==2.3.3
+Werkzeug==2.0.2
+PyPDF2==1.26.0
+pytesseract==0.3.8
+Pillow==8.4.0
+Flask-Uploads==0.2.1
+Flask-SQLAlchemy==2.5.1
+Flask-Migrate==3.1.0

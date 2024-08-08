@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Rotation Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #dropZone {
+            border: 2px dashed #ccc;
+            border-radius: 20px;
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #preview {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .page-container {
+            position: relative;
+            width: 200px;
+            height: 282px;
+            border: 1px solid #ddd;
+            overflow: visible;
+            transition: transform 0.3s ease;
+        }
+        .page-container canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .page-options {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: space-around;
+            padding: 5px;
+        }
+        .page-container:hover .page-options {
+            display: flex;
+        }
+        .page-options button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .page-number {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        #rotateAllBtn, #submitBtn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #rotateAllBtn {
+            background-color: #2196F3;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rotate your PDFs here</h1>
+    <div id="dropZone">
+        <p>Drag & Drop your PDF here or click to select</p>
+        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+    </div>
+    <div id="preview"></div>
+    <button id="rotateAllBtn" style="display: none;">Rotate All Pages</button>
+    <button id="submitBtn" style="display: none;">Apply Rotations & Download</button>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const rotateAllBtn = document.getElementById('rotateAllBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        let pdfFile = null;
+        let pages = [];
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => e.preventDefault());
+        dropZone.addEventListener('drop', handleFileDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+        rotateAllBtn.addEventListener('click', rotateAllPages);
+        submitBtn.addEventListener('click', applyRotations);
+
+        function handleFileDrop(e) {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === 'application/pdf') {
+                pdfFile = file;
+                loadPDF(file);
+            } else {
+                showError('Please upload a PDF file.');
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                pdfFile = file;
+                loadPDF(file);
+            } else {
+                showError('Please select a PDF file.');
+            }
+        }
+
+        async function loadPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            preview.innerHTML = '';
+            pages = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: context, viewport }).promise;
+
+                const pageContainer = document.createElement('div');
+                pageContainer.className = 'page-container';
+                pageContainer.appendChild(canvas);
+
+                const pageOptions = document.createElement('div');
+                pageOptions.className = 'page-options';
+                pageOptions.innerHTML = `
+                    <button onclick="rotatePage(this)" title="Rotate Page">🔄</button>
+                    <button onclick="removePage(this)" title="Remove Page">🗑️</button>
+                    <button onclick="addPage(this)" title="Add Page">➕</button>
+                    <button onclick="dragPage(this)" title="Drag Page">↕️</button>
+                `;
+                pageContainer.appendChild(pageOptions);
+
+                const pageNumber = document.createElement('div');
+                pageNumber.className = 'page-number';
+                pageNumber.textContent = i;
+                pageContainer.appendChild(pageNumber);
+
+                preview.appendChild(pageContainer);
+                pages.push({ canvas, rotation: 0 });
+            }
+
+            rotateAllBtn.style.display = 'block';
+            submitBtn.style.display = 'block';
+        }
+
+        function rotatePage(button) {
+            const pageContainer = button.closest('.page-container');
+            const index = Array.from(preview.children).indexOf(pageContainer);
+            pages[index].rotation = (pages[index].rotation + 90) % 360;
+            pageContainer.style.transform = `rotate(${pages[index].rotation}deg)`;
+        }
+
+        function removePage(button) {
+            const pageContainer = button.closest('.page-container');
+            const index = Array.from(preview.children).indexOf(pageContainer);
+            pages.splice(index, 1);
+            pageContainer.remove();
+            updatePageNumbers();
+        }
+
+        function addPage(button) {
+            const pageContainer = button.closest('.page-container');
+            const index = Array.from(preview.children).indexOf(pageContainer);
+            const newPage = { canvas: pages[index].canvas.cloneNode(true), rotation: 0 };
+            pages.splice(index + 1, 0, newPage);
+
+            const newPageContainer = pageContainer.cloneNode(true);
+            newPageContainer.style.transform = '';
+            preview.insertBefore(newPageContainer, pageContainer.nextSibling);
+            updatePageNumbers();
+        }
+
+        function dragPage(button) {
+            // Implement drag functionality here
+            alert('Drag functionality not implemented in this example.');
+        }
+
+        function updatePageNumbers() {
+            const pageContainers = preview.querySelectorAll('.page-container');
+            pageContainers.forEach((container, index) => {
+                const pageNumber = container.querySelector('.page-number');
+                pageNumber.textContent = index + 1;
+            });
+        }
+
+        function rotateAllPages() {
+            pages.forEach((page, index) => {
+                page.rotation = (page.rotation + 90) % 360;
+                preview.children[index].style.transform = `rotate(${page.rotation}deg)`;
+            });
+        }
+
+        function applyRotations() {
+            if (!pdfFile) {
+                showError('Please upload a PDF file first.');
+                return;
+            }
+        
+            const formData = new FormData();
+            formData.append('pdf', pdfFile);
+        
+            fetch('/rotate/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(uploadResult => {
+                const filename = uploadResult.filename;
+                
+                // Prepare the pages_data array
+                const pages_data = pages.map((page, index) => ({
+                    index: index,
+                    rotation: page.rotation
+                }));
+        
+                // Send the rotation request
+                return fetch('/rotate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ filename, pages: pages_data }),
+                });
+            })
+            .then(response => response.json())
+            .then(rotateResult => {
+                const rotatedFilename = rotateResult.rotated_filename;
+                // Redirect to download the rotated PDF
+                window.location.href = `/rotated/download/${rotatedFilename}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('An error occurred while processing the PDF. Please try again.');
+            });
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.body.insertBefore(errorDiv, preview);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

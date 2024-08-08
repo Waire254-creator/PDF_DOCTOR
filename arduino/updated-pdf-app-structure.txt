@@ -1,0 +1,83 @@
+my_app/
+│
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+│   ├── forms.py
+│   │
+│   ├── organize/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   │
+│   ├── merge/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   │
+│   ├── split/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   │
+│   ├── repair/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   └── utils.py
+│   │
+│   └── ocr/
+│       ├── __init__.py
+│       ├── routes.py
+│       └── utils.py
+│
+├── static/
+│   ├── css/
+│   │   ├── styles.css
+│   │   ├── pdf_organizer.css
+│   │   ├── pdf_merge.css
+│   │   ├── pdf_split.css
+│   │   ├── pdf_repair.css
+│   │   └── pdf_ocr.css
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── pdf_organizer.js
+│   │   ├── pdf_merge.js
+│   │   ├── pdf_split.js
+│   │   ├── pdf_repair.js
+│   │   └── pdf_ocr.js
+│   └── images/
+│
+├── templates/
+│   ├── base.html
+│   ├── home.html
+│   ├── organize/
+│   │   └── organize.html
+│   ├── merge/
+│   │   └── merge.html
+│   ├── split/
+│   │   └── split.html
+│   ├── repair/
+│   │   └── repair.html
+│   └── ocr/
+│       └── ocr.html
+│
+├── temp/
+│   └── .gitkeep
+│
+├── modules/
+│   ├── pdf_processor.py
+│   ├── pdf_merger.py
+│   ├── pdf_splitter.py
+│   ├── pdf_repairer.py
+│   └── pdf_ocr.py
+│
+├── utils/
+│   ├── __init__.py
+│   └── helpers.py
+│
+├── venv/
+│
+├── requirements.txt
+├── config.py
+└── run.py

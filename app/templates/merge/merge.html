@@ -1,0 +1,408 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge PDFs</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        /* Styles remain the same */
+        
+        .merge-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        #file-input {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .preview-item {
+            position: relative;
+            width: calc(33.333% - 14px);
+            aspect-ratio: 1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: move;
+        }
+        .preview-item canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-item .remove-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+            z-index: 10;
+        }
+        .preview-item:hover .remove-button {
+            display: block;
+        }
+        .preview-item .drag-icon {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 14px;
+            display: none;
+            z-index: 10;
+        }
+        .preview-item:hover .drag-icon {
+            display: block;
+        }
+        .preview-item .order-number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .preview-item:hover .order-number {
+            display: none;
+        }
+        .preview-item.dragging {
+            opacity: 0.5;
+        }
+        .page-selector {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+        .preview-item:hover .page-selector {
+            display: flex;
+        }
+        .page-selector input {
+            margin: 5px;
+            padding: 5px;
+            width: 80%;
+        }
+        .page-selector .info {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        #side-pane {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        #merge-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #merge-button:hover {
+            background-color: #45a049;
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            margin-top: 20px;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #progress-bar .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.3s ease;
+        }
+        #output-filename {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        #merge-status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #download-link {
+            display: none;
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="merge-container">
+        <h1>Merge PDFs</h1>
+        <input type="file" name="files" id="file-input" multiple accept=".pdf">
+        <div id="preview-container"></div>
+        <div id="side-pane"></div>
+        <input type="text" id="output-filename" placeholder="Enter output filename (optional)">
+        <button id="merge-button" type="submit">Merge PDFs</button>
+        <div id="progress-bar"><div class="progress"></div></div>
+        <div id="merge-status"></div>
+        <a id="download-link" href="#" download>Download Merged PDF</a>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('file-input');
+            const previewContainer = document.getElementById('preview-container');
+            const sidePane = document.getElementById('side-pane');
+            const mergeButton = document.getElementById('merge-button');
+            const progressBar = document.getElementById('progress-bar').querySelector('.progress');
+            let selectedFiles = [];
+
+            fileInput.addEventListener('change', function(e) {
+                selectedFiles = Array.from(e.target.files).map(file => ({
+                    file: file,
+                    selectedPages: 'all'
+                }));
+                updatePreview();
+                updateSidePane();
+            });
+
+            async function updatePreview() {
+                previewContainer.innerHTML = '';
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const fileObj = selectedFiles[i];
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    previewItem.draggable = true;
+                    previewItem.dataset.index = i;
+                    
+                    const canvas = document.createElement('canvas');
+                    previewItem.appendChild(canvas);
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'remove-button';
+                    removeButton.textContent = '×';
+                    removeButton.onclick = (e) => {
+                        e.stopPropagation();
+                        removeFile(i);
+                    };
+                    previewItem.appendChild(removeButton);
+
+                    const dragIcon = document.createElement('div');
+                    dragIcon.className = 'drag-icon';
+                    dragIcon.innerHTML = '&#8942;&#8942;'; // Unicode for two vertical ellipses
+                    previewItem.appendChild(dragIcon);
+
+                    const orderNumber = document.createElement('div');
+                    orderNumber.className = 'order-number';
+                    orderNumber.textContent = i + 1;
+                    previewItem.appendChild(orderNumber);
+
+                    const pageSelector = document.createElement('div');
+                    pageSelector.className = 'page-selector';
+                    pageSelector.innerHTML = `
+                        <input type="text" placeholder="Enter page numbers or ranges">
+                        <div class="info">e.g., 1-3, 5, 7-9 or 'all'</div>
+                    `;
+                    const input = pageSelector.querySelector('input');
+                    input.value = fileObj.selectedPages;
+                    input.addEventListener('click', (e) => e.stopPropagation());
+                    input.addEventListener('input', (e) => {
+                        fileObj.selectedPages = e.target.value;
+                        updateSidePane();
+                    });
+                    previewItem.appendChild(pageSelector);
+
+                    previewContainer.appendChild(previewItem);
+
+                    try {
+                        const arrayBuffer = await fileObj.file.arrayBuffer();
+                        const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+                        const page = await pdf.getPage(1);
+                        const viewport = page.getViewport({scale: 1});
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        await page.render({canvasContext: context, viewport: viewport}).promise;
+                        
+                        // Update the info text with the total number of pages
+                        const infoDiv = pageSelector.querySelector('.info');
+                        infoDiv.textContent += ` (Total pages: ${pdf.numPages})`;
+                    } catch (error) {
+                        console.error('Error rendering PDF:', error);
+                        canvas.style.display = 'none';
+                        previewItem.textContent = `Error previewing ${fileObj.file.name}`;
+                    }
+                }
+                setupDragAndDrop();
+            }
+
+            function updateSidePane() {
+                let content = `Selected ${selectedFiles.length} file(s)<br><br>`;
+                selectedFiles.forEach((fileObj, index) => {
+                    content += `${index + 1}. ${fileObj.file.name}: Pages ${fileObj.selectedPages}<br>`;
+                });
+                sidePane.innerHTML = content;
+            }
+
+            function removeFile(index) {
+                selectedFiles.splice(index, 1);
+                updatePreview();
+                updateSidePane();
+            }
+
+            function setupDragAndDrop() {
+                const items = document.querySelectorAll('.preview-item');
+                items.forEach(item => {
+                    item.addEventListener('dragstart', dragStart);
+                    item.addEventListener('dragover', dragOver);
+                    item.addEventListener('dragenter', dragEnter);
+                    item.addEventListener('dragleave', dragLeave);
+                    item.addEventListener('drop', drop);
+                    item.addEventListener('dragend', dragEnd);
+                });
+            }
+
+            function dragStart() {
+                this.classList.add('dragging');
+            }
+
+            function dragOver(e) {
+                e.preventDefault();
+            }
+
+            function dragEnter(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            }
+
+            function dragLeave() {
+                this.classList.remove('drag-over');
+            }
+
+            function drop(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                const draggedIndex = parseInt(document.querySelector('.dragging').dataset.index);
+                const targetIndex = parseInt(this.dataset.index);
+                if (draggedIndex !== targetIndex) {
+                    const [reorderedItem] = selectedFiles.splice(draggedIndex, 1);
+                    selectedFiles.splice(targetIndex, 0, reorderedItem);
+                    updatePreview();
+                    updateSidePane();
+                }
+            }
+
+            function dragEnd() {
+                this.classList.remove('dragging');
+            }
+
+            mergeButton.addEventListener('click', async function() {
+                if (selectedFiles.length < 2) {
+                    alert('Please select at least two PDF files to merge.');
+                    return;
+                }
+
+                const formData = new FormData();
+                selectedFiles.forEach((fileObj, index) => {
+                    formData.append('files[]', fileObj.file);
+                    formData.append(`pageRanges[]`, fileObj.selectedPages);
+                });
+                
+                const outputFilename = document.getElementById('output-filename').value || 'merged.pdf';
+                formData.append('outputFilename', outputFilename);
+
+                const mergeStatus = document.getElementById('merge-status');
+                const downloadLink = document.getElementById('download-link');
+                mergeStatus.textContent = 'Merging PDFs...';
+                mergeStatus.className = '';
+                downloadLink.style.display = 'none';
+
+
+                try {
+                    const response = await fetch('/merge', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to merge PDFs');
+                    }
+
+                    const result = await response.json();
+                    if (response.ok && result.status === 'success') {
+                        mergeStatus.textContent = 'PDFs merged successfully!';
+                        mergeStatus.className = 'success';
+                        downloadLink.href = result.download_url;
+                        downloadLink.download = result.filename;
+                        downloadLink.textContent = `Download ${result.filename}`;
+                        downloadLink.style.display = 'inline-block';
+                    } else {
+                        throw new Error(result.message || 'Failed to merge PDFs');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    mergeStatus.textContent = `An error occurred during the merging process: ${error.message}`;
+                    mergeStatus.className = 'error';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

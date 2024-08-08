@@ -1,6 +1,86 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin-top: 60px; /* Adjusted to account for fixed header */
+        padding: 0;
+        background-color: #f8f9fa;
+    }
+
+    h1 {
+        text-align: center;
+        color: #3f15f8;
+        margin-top: 2rem;
+    }
+
+    p {
+        text-align: center;
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+
+    .home-page {
+        padding: 2rem;
+    }
+
+    .icon-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .icon-button {
+        background-color: #ffffff;
+        border-radius: 10px;
+        width: 200px;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .icon-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-button img {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 1rem;
+    }
+
+    .icon-button .button-text {
+        color: #333;
+        font-size: 1rem;
+    }
+
+    .icon-button small {
+        display: block;
+        color: #6c757d;
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
+    .icon-button a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+</style>
+
 <h1>Welcome to PDF DOCTOR</h1>
 <p>Select a function to get started:</p>
 
@@ -18,15 +98,12 @@
                 <div class="button-text">Split PDF<br><small>Split PDFs into specific ranges</small></div>
             </a>
         </div>
-        <!-- Add similar icon buttons for all functionalities -->
-
         <div class="icon-button">
             <a href="/compress_pdf">
                 <img src="{{ url_for('static', filename='images/compress_pdf.png') }}" alt="Compress PDF Icon">
                 <div class="button-text">Compress PDF<br><small>Reduce PDFs size while maintaining quality</small></div>
             </a>
         </div>
-
         <div class="icon-button">
             <a href="/organize_pdf">
                 <img src="{{ url_for('static', filename='images/organize_pdf.png') }}" alt="Organize PDF Icon">
@@ -183,12 +260,6 @@
                 <div class="button-text">Extract Text<br><small>Extract text from images</small></div>
             </a>
         </div>
-    </div>
-</section>
-
-
-
-
     </div>
 </section>
 {% endblock %}

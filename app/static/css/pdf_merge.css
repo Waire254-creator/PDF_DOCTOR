@@ -1,0 +1,11 @@
+#preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#preview-container img {
+    width: 100px;
+    height: auto;
+    cursor: move;
+}
